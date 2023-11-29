@@ -179,14 +179,14 @@ enum Decider80211p::PACKET_OK_RESULT Decider80211p::packetOk(double sinrMin, dou
     packetOkSinr = NistErrorRate::getChunkSuccessRate(bitrate, BANDWIDTH_11P, sinrMin, PHY_HDR_SERVICE_LENGTH + lengthMPDU + PHY_TAIL_LENGTH);
 
     // check if header is broken
-    double headerNoError = NistErrorRate::getChunkSuccessRate(PHY_HDR_BITRATE, BANDWIDTH_11P, sinrMin, PHY_HDR_PLCPSIGNAL_LENGTH);
+    double headerNoError = NistErrorRate::getChunkSuccessRate(120000000, BANDWIDTH_11P, sinrMin, PHY_HDR_PLCPSIGNAL_LENGTH);
 
     double headerNoErrorSnr;
     // compute PER also for SNR only
     if (collectCollisionStats) {
 
         packetOkSnr = NistErrorRate::getChunkSuccessRate(bitrate, BANDWIDTH_11P, snrMin, PHY_HDR_SERVICE_LENGTH + lengthMPDU + PHY_TAIL_LENGTH);
-        headerNoErrorSnr = NistErrorRate::getChunkSuccessRate(PHY_HDR_BITRATE, BANDWIDTH_11P, snrMin, PHY_HDR_PLCPSIGNAL_LENGTH);
+        headerNoErrorSnr = NistErrorRate::getChunkSuccessRate(120000000, BANDWIDTH_11P, snrMin, PHY_HDR_PLCPSIGNAL_LENGTH);
 
         // the probability of correct reception without considering the interference
         // MUST be greater or equal than when consider it
@@ -262,7 +262,7 @@ bool Decider80211p::cca(simtime_t_cref time, AirFrame* exclude)
     double minPower = phy->getNoiseFloorValue();
     bool isChannelIdle = minPower < ccaThreshold;
     if (airFrames.size() > 0) {
-        size_t usedFreqIndex = airFrames.front()->getSignal().getSpectrum().indexOf(centerFrequency - 5e6);
+        size_t usedFreqIndex = airFrames.front()->getSignal().getSpectrum().indexOf(centerFrequency);
         isChannelIdle = SignalUtils::isChannelPowerBelowThreshold(time, airFrames, usedFreqIndex, ccaThreshold - minPower, exclude);
     }
 

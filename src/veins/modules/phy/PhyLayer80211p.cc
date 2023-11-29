@@ -54,14 +54,8 @@ void PhyLayer80211p::initialize(int stage)
         allowTxDuringRx = par("allowTxDuringRx").boolValue();
         collectCollisionStatistics = par("collectCollisionStatistics").boolValue();
 
-        // Create frequency mappings and initialize spectrum for signal representation
-        Spectrum::Frequencies freqs;
-        for (auto& channel : IEEE80211ChannelFrequencies) {
-            freqs.push_back(channel.second - 5e6);
-            freqs.push_back(channel.second);
-            freqs.push_back(channel.second + 5e6);
-        }
-        overallSpectrum = Spectrum(freqs);
+
+        overallSpectrum = Spectrum({27000000000});
     }
     BasePhyLayer::initialize(stage);
 }
@@ -264,7 +258,7 @@ void PhyLayer80211p::changeListeningChannel(Channel channel)
     Decider80211p* dec = dynamic_cast<Decider80211p*>(decider.get());
     ASSERT(dec);
 
-    double freq = IEEE80211ChannelFrequencies.at(channel);
+    double freq = 27000000000;
     dec->changeFrequency(freq);
 }
 
@@ -317,13 +311,13 @@ void PhyLayer80211p::attachSignal(AirFrame* airFrame, cObject* ctrlInfo)
     const auto duration = getFrameDuration(airFrame->getEncapsulatedPacket()->getBitLength(), ctrlInfo11p->mcs);
     ASSERT(duration > 0);
     Signal signal(overallSpectrum, simTime(), duration);
-    auto freqIndex = overallSpectrum.indexOf(IEEE80211ChannelFrequencies.at(ctrlInfo11p->channelNr));
-    signal.at(freqIndex - 1) = ctrlInfo11p->txPower_mW;
-    signal.at(freqIndex) = ctrlInfo11p->txPower_mW;
-    signal.at(freqIndex + 1) = ctrlInfo11p->txPower_mW;
-    signal.setDataStart(freqIndex - 1);
-    signal.setDataEnd(freqIndex + 1);
-    signal.setCenterFrequencyIndex(freqIndex);
+
+    signal.at(0) = ctrlInfo11p->txPower_mW;
+    signal.at(0) = ctrlInfo11p->txPower_mW;
+    signal.at(0) = ctrlInfo11p->txPower_mW;
+    signal.setDataStart(0);
+    signal.setDataEnd(0);
+    signal.setCenterFrequencyIndex(0);
     // copy the signal into the AirFrame
     airFrame->setSignal(signal);
     airFrame->setDuration(signal.getDuration());

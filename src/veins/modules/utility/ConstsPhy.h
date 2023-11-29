@@ -47,58 +47,62 @@ enum class MCS {
 enum class Bandwidth {
     ofdm_5_mhz,
     ofdm_10_mhz,
-    ofdm_20_mhz
+    ofdm_20_mhz,
+    ofdm_400_mhz
 };
 
 /** @brief Given bandwidth and MCS returns datarate in bits per second */
 inline uint64_t getOfdmDatarate(MCS mcs, Bandwidth bw)
 {
-    // divide datarate by div, depending on bandwidth
-    uint64_t div;
+    // multiply datarate by mult, depending on bandwidth
+    uint64_t mult;
     // datarate to be returned
     uint64_t dr;
     switch (bw) {
-    case Bandwidth::ofdm_5_mhz:
-        div = 4;
-        break;
-    case Bandwidth::ofdm_10_mhz:
-        div = 2;
+    case Bandwidth::ofdm_400_mhz:
+        mult = 80;
         break;
     case Bandwidth::ofdm_20_mhz:
+        mult = 4;
+        break;
+    case Bandwidth::ofdm_10_mhz:
+        mult = 2;
+        break;
+    case Bandwidth::ofdm_5_mhz:
     default:
-        div = 1;
+        mult = 1;
         break;
     }
     switch (mcs) {
     case MCS::ofdm_bpsk_r_1_2:
-        dr = 6000000;
+        dr = 1500000;
         break;
     case MCS::ofdm_bpsk_r_3_4:
-        dr = 9000000;
+        dr = 2250000;
         break;
     case MCS::ofdm_qpsk_r_1_2:
-        dr = 12000000;
+        dr = 3000000;
         break;
     case MCS::ofdm_qpsk_r_3_4:
-        dr = 18000000;
+        dr = 4500000;
         break;
     case MCS::ofdm_qam16_r_1_2:
-        dr = 24000000;
-        break;
-    case MCS::ofdm_qam16_r_3_4:
-        dr = 36000000;
-        break;
-    case MCS::ofdm_qam64_r_2_3:
-        dr = 48000000;
-        break;
-    case MCS::ofdm_qam64_r_3_4:
-        dr = 54000000;
-        break;
-    default:
         dr = 6000000;
         break;
+    case MCS::ofdm_qam16_r_3_4:
+        dr = 9000000;
+        break;
+    case MCS::ofdm_qam64_r_2_3:
+        dr = 12000000;
+        break;
+    case MCS::ofdm_qam64_r_3_4:
+        dr = 13500000;
+        break;
+    default:
+        dr = 1500000;
+        break;
     }
-    return (dr / div);
+    return (dr * mult);
 }
 
 /** @brief returns the number of databits per ofdm symbol */
@@ -150,6 +154,9 @@ inline uint64_t getBandwidth(Bandwidth bw)
     case Bandwidth::ofdm_20_mhz:
         return 20000000;
         break;
+    case Bandwidth::ofdm_400_mhz:
+        return 400000000;
+        break;
     default:
         ASSERT2(false, "Invalid datarate for required bandwidth");
         return -1;
@@ -159,6 +166,32 @@ inline uint64_t getBandwidth(Bandwidth bw)
 /** @brief returns encoding given datarate */
 inline MCS getMCS(uint64_t datarate, Bandwidth bw)
 {
+    if (bw == Bandwidth::ofdm_400_mhz) {
+        if (datarate == 120000000) {
+            return MCS::ofdm_bpsk_r_1_2;
+        }
+        if (datarate == 180000000) {
+            return MCS::ofdm_bpsk_r_3_4;
+        }
+        if (datarate == 240000000) {
+            return MCS::ofdm_qpsk_r_1_2;
+        }
+        if (datarate == 360000000) {
+            return MCS::ofdm_qpsk_r_3_4;
+        }
+        if (datarate == 480000000) {
+            return MCS::ofdm_qam16_r_1_2;
+        }
+        if (datarate == 720000000) {
+            return MCS::ofdm_qam16_r_3_4;
+        }
+        if (datarate == 960000000) {
+            return MCS::ofdm_qam64_r_2_3;
+        }
+        if (datarate == 1080000000) {
+            return MCS::ofdm_qam64_r_3_4;
+        }
+    }
     if (bw == Bandwidth::ofdm_10_mhz) {
         if (datarate == 3000000) {
             return MCS::ofdm_bpsk_r_1_2;

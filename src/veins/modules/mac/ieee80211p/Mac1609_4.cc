@@ -249,7 +249,7 @@ void Mac1609_4::handleSelfMsg(cMessage* msg)
             if (useSCH) EV_TRACE << " Time in this slot left: " << timeLeftInSlot() << std::endl;
 
             Channel channelNr = (activeChannel == ChannelType::control) ? Channel::cch : mySCH;
-            double freq = IEEE80211ChannelFrequencies.at(channelNr);
+            double freq = 27000000000;
 
             EV_TRACE << "Sending a Packet. Frequency " << freq << " Priority" << lastAC << std::endl;
             sendFrame(mac, RADIODELAY_11P, channelNr, usedMcs, txPower_mW);
@@ -1056,7 +1056,7 @@ void Mac1609_4::sendAck(LAddress::L2Type recpAddress, unsigned long wsmId)
 
     // TODO: check ack procedure when channel switching is allowed
     // double freq = (activeChannel == ChannelType::control) ? IEEE80211ChannelFrequencies.at(Channel::cch) : IEEE80211ChannelFrequencies.at(mySCH);
-    double freq = IEEE80211ChannelFrequencies.at(Channel::cch);
+    double freq = 27000000000;
 
     EV_TRACE << "Sending an ack. Frequency " << freq << " at time : " << simTime() + SIFS_11P << std::endl;
     sendFrame(mac, SIFS_11P, Channel::cch, mcs, txPower);

@@ -44,6 +44,6 @@
     </AnalogueModels>
     <Decider type="Decider80211p">
         <!-- The center frequency on which the phy listens-->
-        <parameter name="centerFrequency" type="double" value="5.890e9"/>
+        <parameter name="centerFrequency" type="double" value="27e9"/>
     </Decider>
 </root>
