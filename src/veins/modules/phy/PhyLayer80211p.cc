@@ -55,7 +55,7 @@ void PhyLayer80211p::initialize(int stage)
         collectCollisionStatistics = par("collectCollisionStatistics").boolValue();
 
 
-        overallSpectrum = Spectrum({27000000000});
+        overallSpectrum = Spectrum({28000000000});
     }
     BasePhyLayer::initialize(stage);
 }
@@ -258,7 +258,7 @@ void PhyLayer80211p::changeListeningChannel(Channel channel)
     Decider80211p* dec = dynamic_cast<Decider80211p*>(decider.get());
     ASSERT(dec);
 
-    double freq = 27000000000;
+    double freq = 28000000000;
     dec->changeFrequency(freq);
 }
 

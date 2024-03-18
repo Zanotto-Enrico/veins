@@ -131,7 +131,7 @@ const SimTime SWITCHING_INTERVAL_11P = SimTime().setRaw(50000000000UL);
  */
 const SimTime GUARD_INTERVAL_11P = SimTime().setRaw(4000000000UL);
 
-const Bandwidth BANDWIDTH_11P = Bandwidth::ofdm_10_mhz;
+const Bandwidth BANDWIDTH_11P = Bandwidth::ofdm_400_mhz;
 
 /** @brief Channels as reserved by the FCC
  *

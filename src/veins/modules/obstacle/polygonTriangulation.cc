@@ -83,6 +83,8 @@ std::vector<std::vector<Coord>> veins::partitionPolygonIntoMonotone(std::vector<
     {
         if(isCCW) polygon[i].y = -polygon[i].y;
         polygon[i].index = i;
+        //temporary
+        if(polygon[i].x == polygon[(i+1)%polygon.size()].x ) polygon[i].x = polygon[i].x+0.000001;
     }
     int vertices_num = polygon.size();
     // Create the event queue and initialize it with vertex and edge events.

@@ -38,12 +38,12 @@
         </AnalogueModel>
         <AnalogueModel type="SimpleObstacleShadowing" thresholding="true">
             <obstacles>
-                <type id="building" db-per-cut="9" db-per-meter="0.4" />
+                <type id="building" db-per-cut="17.8288" db-per-meter="0.5" />
             </obstacles>
         </AnalogueModel>
     </AnalogueModels>
     <Decider type="Decider80211p">
         <!-- The center frequency on which the phy listens-->
-        <parameter name="centerFrequency" type="double" value="27e9"/>
+        <parameter name="centerFrequency" type="double" value="28e9"/>
     </Decider>
 </root>
